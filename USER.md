@@ -1,17 +1,13 @@
 # USER.md - About Your Human
 
-_Learn about the person you're helping. Update this as you go._
-
-- **Name:**
-- **What to call them:**
-- **Pronouns:** _(optional)_
-- **Timezone:**
+- **Name:** Niduranga
+- **What to call them:** Niduranga
+- **Timezone:** Asia/Kuala_Lumpur (Inferred from logs, confirm if different)
 - **Notes:**
+    - Senior-level expectations.
+    - Focus: MERN Stack, Laravel, Scalability, Production-ready code.
 
 ## Context
 
-_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
-
----
-
-The more you know, the better you can help. But remember — you're learning about a person, not building a dossier. Respect the difference.
+- Building scalable web applications.
+- Prefers MERN and Laravel stacks.
