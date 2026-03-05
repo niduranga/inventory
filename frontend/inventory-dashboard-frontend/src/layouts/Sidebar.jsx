@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from './auth/authSlice'; // Corrected import path
+import { logout } from './auth/authSlice'; // Corrected path to authSlice
 
 const Sidebar = () => {
     const dispatch = useDispatch();

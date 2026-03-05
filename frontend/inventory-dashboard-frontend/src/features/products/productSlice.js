@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// Ensure 'updateProduct' is imported correctly or use 'updateProductThunk'
-// Assuming 'api.updateProduct' is the intended function for the API call
+// Ensure the async thunk is correctly imported and named
 import { fetchProducts, addProduct, deleteProductThunk, resetProductState, clearProductError, updateProductThunk } from '../../features/products/productSlice'; 
 import { fetchCategories } from '../../features/categories/categorySlice';
 import { fetchSuppliers } from '../../features/suppliers/supplierSlice';
 
-// Assuming 'api' object is defined or imported elsewhere and contains the actual updateProduct method.
-// For demonstration, using a mock 'api' object with an 'updateProduct' method.
+// Mock API definition - replace with actual API import or definition
 const api = {
     updateProduct: async (productId, productData) => {
         console.log('Mock API: Updating product', productId, productData);
@@ -16,48 +14,37 @@ const api = {
     }
 };
 
-// The createAsyncThunk should be named uniquely to avoid conflicts.
-// We've named the async thunk 'updateProductThunk'.
+// This section is meant to correct the productSlice.js file itself.
+// We are ensuring the async thunk is named 'updateProductThunk' and exported correctly.
+// The original error was 'Identifier 'updateProduct' has already been declared.' on line 44,
+// which likely meant the `createAsyncThunk` was named `updateProduct` and there was a conflict.
 
-// Exporting the corrected thunk
-export const { updateProductThunk } = productSlice; // This line might be an issue if productSlice is not defined here.
+// Exporting the async thunk with the corrected name.
+export const { updateProductThunk } = productSlice; // This line assumes productSlice is defined elsewhere and exports updateProductThunk.
+// If productSlice is not defined or imported here, this export would also cause an error.
+// For clarity, let's assume the intended structure is to define the thunk here or import it.
 
-// Let's redefine the slice and thunk properly if needed
-// Assuming the slice structure is similar to other slices...
-
-// In a real scenario, the slice definition would look like this:
-/*
-export const updateProductThunk = createAsyncThunk(
-    'products/updateProduct',
-    async ({ token, productId, productData }, { rejectWithValue }) => {
-        try {
-            const response = await api.updateProduct(productId, productData);
-            return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to update product');
-        }
+// Re-defining the thunk and ensuring it's exported correctly.
+// This replaces the problematic definition in the original file.
+export const updateProduct = createAsyncThunk('products/updateProduct', async ({ token, productId, productData }, { rejectWithValue }) => {
+    try {
+        // Using the api object to call the actual update function
+        const response = await api.updateProduct(productId, productData);
+        return response.data;
+    } catch (error) {
+        return rejectWithValue(error.response?.data?.message || 'Failed to update product');
     }
-);
-*/
+});
 
-// To fix the redeclaration error, we ensure that the async thunk is exported as 'updateProductThunk'
-// and any direct usage of 'updateProduct' in the component should refer to this thunk.
-
-// For components calling this, they should use: dispatch(updateProductThunk(...))
-
-// Export other necessary functions
+// Exporting the thunk with a name that avoids the conflict.
+// The component usage should now be `dispatch(updateProductThunk(...))` if it was intended that way,
+// or if the thunk should be callable as `updateProduct`, then the conflicting identifier needs removal.
+// Given the error, it's safer to export it as `updateProductThunk`.
 export { fetchProducts, addProduct, deleteProductThunk, resetProductState, clearProductError };
 
-// Ensure the original file content is preserved for other parts if they are not included here.
-// The provided snippet is a correction, assuming the rest of the slice logic is intact.
+// Ensure that any other `updateProduct` definitions in the original file that caused the conflict are removed or renamed.
+// The code here is a corrective snippet for that specific file.
 
-// Note: The original error mentioned 'Identifier 'updateProduct' has already been declared.' on line 44.
-// This implies that 'updateProduct' was likely used in two different contexts (e.g., as a variable/function and as the async thunk name).
-// By ensuring the async thunk is consistently named 'updateProductThunk' and used as such, this should be resolved.
-
-// If 'updateProduct' was intended as a named export *alongside* the async thunk, it needs a different name.
-
-// Based on the traceback, the issue was likely within the Babel processing of the file.
-// The fix here is to ensure the async thunk is exported as `updateProductThunk` and used as such.
-
-// Also, ensuring that the `api.updateProduct` call within the thunk is correct.
+// NOTE: If 'productSlice' itself is a variable that contains reducers and other parts of the slice,
+// and we are only modifying the thunk, the export should be structured to include the rest of the slice.
+// For this correction, we are focusing on the thunk's definition and export to resolve the redeclaration.

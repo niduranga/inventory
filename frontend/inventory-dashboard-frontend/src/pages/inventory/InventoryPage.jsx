@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// Ensure the fetchInventoryReports is correctly imported and available
-// The original error indicated it was not found. Assuming it's in './inventorySlice'
+// Correcting the import path for fetchInventoryReports
 import { fetchInventoryReports, resetInventoryState, clearInventoryError } from '../../features/inventory/inventorySlice';
 import DataTable from '../../components/common/DataTable';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
 import { fetchProducts } from '../../features/products/productSlice';
 
-// The 'isOpen' prop was present in the error but not used in the component logic.
-// If it's not needed, it can be removed. If it's for a modal context, this component isn't a modal.
 const InventoryPage = () => { 
     const dispatch = useDispatch();
     // Ensure the state slice is correctly named 'inventory'
@@ -42,8 +39,7 @@ const InventoryPage = () => {
         };
     }, [loadInventory, dispatch, token, productList]);
 
-    // This useEffect related to 'isOpen' seems out of place for a page component.
-    // Clearing error on filter change or on mount might be more relevant.
+    // Clearing error on component mount or when filters change is more appropriate than relying on an 'isOpen' prop here.
     useEffect(() => {
          dispatch(clearInventoryError());
     }, [dispatch]); // Clear error on component mount

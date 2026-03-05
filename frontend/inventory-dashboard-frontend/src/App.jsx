@@ -1,9 +1,9 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import MainLayout from './layouts/MainLayout';
-import AuthLayout from './layouts/AuthLayout';
-import Spinner from './components/common/Spinner';
+import MainLayout from './layouts/MainLayout'; // Assuming MainLayout is in src/layouts/MainLayout.jsx
+import AuthLayout from './layouts/AuthLayout'; // Assuming AuthLayout is in src/layouts/AuthLayout.jsx
+import Spinner from './components/common/Spinner'; // Assuming Spinner is in src/components/common/Spinner.jsx
 
 // Lazy load pages
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
@@ -50,13 +50,16 @@ function App() {
         return token ? children : <Navigate to="/login" />;
     };
 
+    // Role-based access control (RBAC) component remains the same.
+    // It checks user role and redirects if unauthorized.
     const RoleBasedRoute = ({ children, allowedRoles }) => {
         const userRole = user?.role;
         if (!token) {
             return <Navigate to="/login" />;
         }
         if (!allowedRoles.includes(userRole)) {
-            return <Navigate to="/dashboard" />;
+            // Redirect to dashboard or a 403 page if not allowed
+            return <Navigate to="/dashboard" replace />;
         }
         return children;
     };
