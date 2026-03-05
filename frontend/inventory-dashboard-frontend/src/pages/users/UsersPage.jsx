@@ -5,6 +5,7 @@ import DataTable from '../../components/common/DataTable';
 import UserFormModal from '../../components/users/UserFormModal';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
+import { useNavigate } from 'react-router-dom';
 
 const UsersPage = () => {
     const dispatch = useDispatch();

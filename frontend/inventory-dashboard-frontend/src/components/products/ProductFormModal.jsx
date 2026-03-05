@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, updateProduct, clearProductError } from '../../features/products/productSlice';
 import Modal from '../common/Modal';
 import FormInput from '../common/FormInput';
