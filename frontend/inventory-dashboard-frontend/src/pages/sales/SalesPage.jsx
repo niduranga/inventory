@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSales, createSaleThunk, updateSaleThunk, cancelSaleThunk, resetSaleState } from '../../features/sales/saleSlice';
+import { fetchSales, createSaleThunk, updateSaleThunk, cancelSaleThunk, resetSaleState, clearSaleError } from '../../features/sales/saleSlice';
 import DataTable from '../../components/common/DataTable';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
-import SaleFormModal from '../../components/sales/SaleFormModal'; 
+import SaleFormModal from '../../components/sales/SaleFormModal';
 import { fetchProducts } from '../../features/products/productSlice';
 import { useNavigate } from 'react-router-dom';
 
 const SalesPage = () => {
     const dispatch = useDispatch();
     const { sales, status, error, pagination } = useSelector((state) => state.sales);
-    const { products: productList } = useSelector((state) => state.products); 
+    const { products: productList } = useSelector((state) => state.products);
     const { token } = useSelector((state) => state.auth);
     const userRole = useSelector((state) => state.auth.user?.role);
 
@@ -35,7 +35,6 @@ const SalesPage = () => {
 
     useEffect(() => {
         loadSales();
-        // Fetch products if needed for POS, but this page is for history/metadata viewing
         if (!productList || productList.length === 0) {
             dispatch(fetchProducts({ token, params: { limit: 1000 } }));
         }
@@ -44,8 +43,15 @@ const SalesPage = () => {
         };
     }, [loadSales, dispatch, token, productList]);
 
+    useEffect(() => {
+        // Clear error on modal open/close
+        if (isModalOpen) {
+            dispatch(clearSaleError());
+        }
+    }, [isModalOpen, dispatch]);
+
     const handleOpenModal = (sale = null) => {
-        if (!sale) return; // Modal is for viewing/editing existing sales metadata
+        if (!sale) return;
         setCurrentSale(sale);
         setIsModalOpen(true);
     };
@@ -124,7 +130,7 @@ const SalesPage = () => {
             cell: (row) => (
                 <div className="flex space-x-2">
                     <button onClick={() => navigate(`/sales/${row._id}`)} className="text-blue-600 hover:text-blue-800">View</button>
-                    <button onClick={() => handleOpenModal(row)} className="text-gray-600 hover:text-gray-800">Edit</button> {/* For metadata update */}
+                    <button onClick={() => handleOpenModal(row)} className="text-gray-600 hover:text-gray-800">Edit</button> 
                     {canCancelSale && (
                         <button onClick={() => handleCancelSale(row._id)} className="text-red-600 hover:text-red-800">Cancel</button>
                     )}

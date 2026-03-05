@@ -1,17 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { fetchProducts, addProduct, updateProduct, deleteProductThunk, resetProductState } from '../../features/products/productSlice';
+import { fetchProducts, resetProductState, clearProductError } from '../../features/products/productSlice';
 import DataTable from '../../components/common/DataTable';
 import ProductFormModal from '../../components/products/ProductFormModal';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
-import { fetchCategories } from '../../features/categories/categorySlice'; // For filter options
-import { fetchSuppliers } from '../../features/suppliers/supplierSlice'; // For filter options
+import { fetchCategories } from '../../features/categories/categorySlice';
+import { fetchSuppliers } from '../../features/suppliers/supplierSlice';
 
 const ProductsPage = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { products, status, error, pagination } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.categories);
     const { suppliers } = useSelector((state) => state.suppliers);
@@ -26,8 +24,8 @@ const ProductsPage = () => {
         supplierId: '',
         page: 1,
         limit: 10,
-        expirationStatus: '', // Add expiration status filter
-        stockStatus: '', // Add stock status filter
+        expirationStatus: '', 
+        stockStatus: '', 
     });
 
     const canCreateEditDelete = userRole === 'owner' || userRole === 'manager';
@@ -38,19 +36,22 @@ const ProductsPage = () => {
 
     useEffect(() => {
         loadProducts();
-        dispatch(fetchCategories({ token, params: { limit: 1000 } })); // Fetch all categories for filter dropdown
-        dispatch(fetchSuppliers({ token, params: { limit: 1000 } })); // Fetch all suppliers for filter dropdown
-
+        dispatch(fetchCategories({ token, params: { limit: 1000 } }));
+        dispatch(fetchSuppliers({ token, params: { limit: 1000 } }));
         return () => {
             dispatch(resetProductState());
         };
     }, [loadProducts, dispatch, token]);
 
-    const handleOpenModal = (product = null) => {
-        if (!canCreateEditDelete && product === null) { // Prevent staff from opening add modal
-            alert('You do not have permission to add products.');
-            return;
+    useEffect(() => {
+        // Clear error on modal open/close
+        if (isModalOpen) {
+            dispatch(clearProductError());
         }
+    }, [isModalOpen, dispatch]);
+
+    const handleOpenModal = (product = null) => {
+        if (!canCreateEditDelete && product === null) return;
         setCurrentProduct(product);
         setIsModalOpen(true);
     };
@@ -72,8 +73,6 @@ const ProductsPage = () => {
         if (resultAction.meta.requestStatus === 'fulfilled') {
             handleCloseModal();
             loadProducts();
-        } else {
-            // Error will be in Redux state and can be displayed by the modal/form
         }
     };
 
@@ -118,24 +117,17 @@ const ProductsPage = () => {
             cell: (row) => (
                 <div className="flex space-x-2">
                     {canCreateEditDelete && (
-                        <button onClick={() => handleOpenModal(row)} className="text-blue-600 hover:text-blue-800">
-                            Edit
-                        </button>
+                        <button onClick={() => handleOpenModal(row)} className="text-blue-600 hover:text-blue-800">Edit</button>
                     )}
                     {canCreateEditDelete && (
-                        <button onClick={() => handleDelete(row._id)} className="text-red-600 hover:text-red-800">
-                            Delete
-                        </button>
+                        <button onClick={() => handleDelete(row._id)} className="text-red-600 hover:text-red-800">Delete</button>
                     )}
-                     <button onClick={() => navigate(`/products/${row._id}`)} className="text-gray-600 hover:text-gray-800">
-                        View
-                    </button>
+                     <button onClick={() => navigate(`/products/${row._id}`)} className="text-gray-600 hover:text-gray-800">View</button>
                 </div>
             )
         }
     ];
 
-    // Options for category and supplier filters
     const categoryOptions = categories.map(cat => ({ value: cat._id, label: cat.name }));
     const supplierOptions = suppliers.map(sup => ({ value: sup._id, label: sup.name }));
 
@@ -144,11 +136,11 @@ const ProductsPage = () => {
         { id: 'supplierId', type: 'select', label: 'Supplier', options: [{ value: '', label: 'All Suppliers' }, ...supplierOptions] },
         { id: 'stockStatus', type: 'select', label: 'Stock Status', options: [
             { value: '', label: 'All Stock' },
-            { value: 'low', label: 'Low Stock' }, // Requires backend support
+            { value: 'low', label: 'Low Stock' },
         ] },
-        { id: 'expirationStatus', type: 'select', label: 'Expiration', options: [
+        { id: 'expirationStatus', type: 'select', label: 'Expiration Status', options: [
             { value: '', label: 'All' },
-            { value: 'expiringSoon', label: 'Expiring Soon' }, // Requires backend support
+            { value: 'expiringSoon', label: 'Expiring Soon (30 days)' },
         ] },
     ];
 
@@ -192,8 +184,8 @@ const ProductsPage = () => {
                         onSubmit={handleSubmit}
                         product={currentProduct}
                         isEditing={!!currentProduct}
-                        categories={categories} // Pass categories for dropdown
-                        suppliers={suppliers} // Pass suppliers for dropdown
+                        categories={categories} 
+                        suppliers={suppliers}
                     />
                 )}
             </div>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, resetProductState } from '../../features/products/productSlice';
+import { fetchInventoryReports, resetInventoryState, clearInventoryError } from '../../features/inventory/inventorySlice';
+import DataTable from '../../components/common/DataTable';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
+import { fetchProducts } from '../../features/products/productSlice';
 
 const InventoryPage = () => {
     const dispatch = useDispatch();
@@ -32,7 +34,7 @@ const InventoryPage = () => {
         return () => {
             dispatch(resetInventoryState());
         };
-    }, [loadPurchases, dispatch, token, productList]);
+    }, [loadInventory, dispatch, token, productList]);
 
     const handleFilterChange = (newFilters) => {
         setSearchParams({ ...searchParams, ...newFilters, page: 1 });

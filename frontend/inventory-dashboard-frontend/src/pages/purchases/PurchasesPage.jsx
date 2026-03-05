@@ -2,17 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPurchases, createPurchaseThunk, updatePurchaseThunk, deletePurchaseThunk, resetPurchaseState } from '../../features/purchases/purchaseSlice';
 import DataTable from '../../components/common/DataTable';
-import PurchaseFormModal from '../../components/purchases/PurchaseFormModal'; // Placeholder for modal
+import PurchaseFormModal from '../../components/purchases/PurchaseFormModal';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
 import { fetchSuppliers } from '../../features/suppliers/supplierSlice';
-import { fetchProducts } from '../../features/products/productSlice'; // To populate product dropdown in create/edit
+import { fetchProducts } from '../../features/products/productSlice';
 
 const PurchasesPage = () => {
     const dispatch = useDispatch();
     const { purchases, status, error, pagination } = useSelector((state) => state.purchases);
-    const { suppliers } = useSelector((state) => state.suppliers); // For filter options
-    const { products: productList } = useSelector((state) => state.products); // For product selection
+    const { suppliers } = useSelector((state) => state.suppliers);
+    const { products: productList } = useSelector((state) => state.products);
     const { token } = useSelector((state) => state.auth);
     const userRole = useSelector((state) => state.auth.user?.role);
 
@@ -36,7 +36,6 @@ const PurchasesPage = () => {
     useEffect(() => {
         loadPurchases();
         dispatch(fetchSuppliers({ token, params: { limit: 1000 } }));
-        // Fetch products if needed for create/edit modal product selection
         if (!productList || productList.length === 0) {
             dispatch(fetchProducts({ token, params: { limit: 1000 } }));
         }
@@ -60,9 +59,7 @@ const PurchasesPage = () => {
         if (!canCreateEditDelete) return;
         let resultAction;
         if (currentPurchase) {
-            // For update, we might only allow certain fields to be changed, like paymentStatus or notes.
-            // Re-calculating totals or changing products is complex and usually disallowed.
-            const { products, ...metadata } = purchaseData; // Assume products array is not updatable here
+            const { products, ...metadata } = purchaseData;
             resultAction = await dispatch(updatePurchaseThunk({ token, purchaseId: currentPurchase._id, purchaseData: metadata }));
         } else {
             resultAction = await dispatch(createPurchaseThunk({ token, purchaseData }));
@@ -180,8 +177,8 @@ const PurchasesPage = () => {
                         onSubmit={handleSubmit}
                         purchase={currentPurchase}
                         isEditing={!!currentPurchase}
-                        suppliers={suppliers} // Pass suppliers for dropdown
-                        products={productList} // Pass products for selection (if applicable)
+                        suppliers={suppliers}
+                        products={productList}
                     />
                 )}
             </div>

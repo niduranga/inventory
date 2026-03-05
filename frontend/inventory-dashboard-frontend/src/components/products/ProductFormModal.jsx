@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProduct, updateProduct, clearProductError } from '../../features/products/productSlice';
+import { fetchCategories } from '../../features/categories/categorySlice';
+import { fetchSuppliers } from '../../features/suppliers/supplierSlice';
+import Modal from '../../components/common/Modal';
+import FormInput from '../../components/common/FormInput'; // Assuming a reusable form input component
 
 const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categories, suppliers }) => {
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
     const { status, error } = useSelector((state) => state.products);
+
     const [formData, setFormData] = useState({
         name: product?.name || '',
         sku: product?.sku || '',
@@ -14,20 +23,53 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categ
         minStockLevel: product?.minStockLevel || 0,
         description: product?.description || '',
         productImage: product?.productImage || '',
+        // Format date for input type="date"
         expirationDate: product?.expirationDate ? new Date(product.expirationDate).toISOString().split('T')[0] : '',
     });
 
     useEffect(() => {
-        dispatch(clearProductError());
-    }, [isOpen, dispatch]);
+        if (product) {
+            setFormData({
+                name: product.name || '',
+                sku: product.sku || '',
+                barcode: product.barcode || '',
+                categoryId: product.categoryId?._id || product.categoryId || '',
+                supplierId: product.supplierId?._id || product.supplierId || '',
+                purchasePrice: product.purchasePrice || 0,
+                sellingPrice: product.sellingPrice || 0,
+                stockQuantity: product.stockQuantity || 0,
+                minStockLevel: product.minStockLevel || 0,
+                description: product.description || '',
+                productImage: product.productImage || '',
+                expirationDate: product.expirationDate ? new Date(product.expirationDate).toISOString().split('T')[0] : '',
+            });
+        } else {
+            // Reset form for new product
+            setFormData({
+                name: '', sku: '', barcode: '', categoryId: '', supplierId: '',
+                purchasePrice: 0, sellingPrice: 0, stockQuantity: 0, minStockLevel: 0,
+                description: '', productImage: '', expirationDate: '',
+            });
+        }
+    }, [product]); // Re-run if product prop changes
+
+    useEffect(() => {
+        // Clear any previous errors when modal opens or when form data changes
+        if (isOpen) {
+             dispatch(clearProductError());
+        }
+    }, [isOpen, dispatch]); // Clear error when modal opens
 
     const handleChange = (e) => {
-        const { name, value, type } = e.target;
+        const { name, value, type, checked } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: type === 'number' ? parseFloat(value) : value,
+            [name]: type === 'number' ? parseFloat(value) : (type === 'checkbox' ? checked : value),
         }));
-        if (error) dispatch(clearProductError());
+        // Clear error if user starts typing in a field after an error occurred
+        if (error) {
+            dispatch(clearProductError());
+        }
     };
 
     const handleFormSubmit = (e) => {

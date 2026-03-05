@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUsers, inviteUserThunk, updateUserThunk, deleteUserThunk, resetUserState } from '../../features/users/userSlice';
+import { fetchUsers, inviteUserThunk, updateUserThunk, deleteUserThunk, resetUserState, clearUserError } from '../../features/users/userSlice';
 import DataTable from '../../components/common/DataTable';
 import UserFormModal from '../../components/users/UserFormModal';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
+import { useNavigate } from 'react-router-dom';
 
 const UsersPage = () => {
     const dispatch = useDispatch();
@@ -16,8 +17,8 @@ const UsersPage = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [searchParams, setSearchParams] = useState({
         search: '',
-        role: '', // Filter by role
-        isActive: null, // Filter by active status
+        role: '',
+        isActive: null,
         page: 1,
         limit: 10,
     });
@@ -36,6 +37,12 @@ const UsersPage = () => {
         };
     }, [loadUsers]);
 
+    useEffect(() => {
+        if (isModalOpen) {
+            dispatch(clearUserError());
+        }
+    }, [isModalOpen, dispatch]);
+
     const handleOpenModal = (user = null) => {
         if (!canInviteUpdateDelete && user === null) return;
         setCurrentUser(user);
@@ -53,7 +60,6 @@ const UsersPage = () => {
         if (currentUser) {
             resultAction = await dispatch(updateUserThunk({ token, userId: currentUser._id, userData }));
         } else {
-            // Invite user flow
             resultAction = await dispatch(inviteUserThunk({ token, userData }));
         }
 
@@ -125,8 +131,8 @@ const UsersPage = () => {
     ];
 
     const additionalFilters = [
-        { id: 'role', type: 'select', label: 'Role', options: [{ value: '', label: 'All Roles' }, ...roleOptions.slice(1)] }, // Slice to exclude 'All Roles' option if needed, or add explicitly
-        { id: 'isActive', type: 'select', label: 'Status', options: [{ value: '', label: 'All Status' }, ...statusOptions.slice(1)] }, // Slice to exclude 'All Status' option if needed, or add explicitly
+        { id: 'role', type: 'select', label: 'Role', options: [{ value: '', label: 'All Roles' }, ...roleOptions.slice(1)] },
+        { id: 'isActive', type: 'select', label: 'Status', options: [{ value: '', label: 'All Status' }, ...statusOptions.slice(1)] },
     ];
 
     return (
@@ -169,7 +175,7 @@ const UsersPage = () => {
                         onSubmit={handleSubmit}
                         user={currentUser}
                         isEditing={!!currentUser}
-                        userRole={userRole} // Pass current user role for permission checks in modal
+                        userRole={userRole} 
                     />
                 )}
             </div>

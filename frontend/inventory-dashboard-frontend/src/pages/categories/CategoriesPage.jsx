@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories, addCategory, updateCategoryThunk, deleteCategoryThunk, resetCategoryState } from '../../features/categories/categorySlice';
+import { fetchCategories, addCategory, updateCategoryThunk, deleteCategoryThunk, resetCategoryState, clearCategoryError } from '../../features/categories/categorySlice';
 import DataTable from '../../components/common/DataTable';
 import CategoryFormModal from '../../components/categories/CategoryFormModal';
 import Layout from '../../layouts/MainLayout';
@@ -32,6 +32,12 @@ const CategoriesPage = () => {
             dispatch(resetCategoryState());
         };
     }, [loadCategories]);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            dispatch(clearCategoryError());
+        }
+    }, [isModalOpen, dispatch]);
 
     const handleOpenModal = (category = null) => {
         if (!canCreateEditDelete && category === null) return;
@@ -89,7 +95,7 @@ const CategoriesPage = () => {
     const columns = [
         { header: 'Name', accessor: 'name' },
         { header: 'Description', accessor: 'description' },
-        { header: 'Created By', accessor: 'createdBy.name' }, // Assuming populated
+        { header: 'Created By', accessor: 'createdBy.name' },
         {
             header: 'Actions',
             cell: (row) => (
