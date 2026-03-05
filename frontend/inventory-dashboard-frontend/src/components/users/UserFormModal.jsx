@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import FormInput from '../common/FormInput';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearProductError } from '../../features/products/productSlice'; // Ensure this path is correct
+import { clearUserError } from '../../features/users/userSlice'; // Assuming this path is correct
 
 const UserFormModal = ({ isOpen, onClose, onSubmit, user, isEditing, userRole }) => {
     const dispatch = useDispatch();
@@ -11,11 +11,10 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, user, isEditing, userRole })
     const [formData, setFormData] = useState({
         name: user?.name || '',
         email: user?.email || '',
-        role: user?.role || 'staff', // Default to staff if not editing or role not provided
+        role: user?.role || 'staff',
         isActive: user?.isActive !== undefined ? user.isActive : true,
     });
 
-    // Effect to clear error when modal opens
     useEffect(() => {
         if (isOpen) {
             dispatch(clearUserError());
@@ -38,13 +37,13 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, user, isEditing, userRole })
         onSubmit(formData);
     };
 
-    const canChangeRole = userRole === 'owner' || userRole === 'superadmin'; // Only owner/superadmin can change roles
+    const canChangeRole = userRole === 'owner' || userRole === 'superadmin';
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={isEditing ? 'Edit User' : 'Invite User'}>
             <form onSubmit={handleFormSubmit} className="space-y-4 p-4 md:p-6">
                 <FormInput label="Full Name" name="name" value={formData.name} onChange={handleChange} required />
-                <FormInput label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} required disabled={isEditing} /> {/* Email usually not editable or requires verification */}
+                <FormInput label="Email Address" name="email" type="email" value={formData.email} onChange={handleChange} required disabled={isEditing} /> 
                 
                 {canChangeRole && (
                     <div>
@@ -60,7 +59,6 @@ const UserFormModal = ({ isOpen, onClose, onSubmit, user, isEditing, userRole })
                             <option value="staff">Staff</option>
                             <option value="manager">Manager</option>
                             <option value="owner">Owner</option>
-                            {/* Superadmin role is usually managed by initial setup or specific superadmin tools */}
                         </select>
                     </div>
                 )}

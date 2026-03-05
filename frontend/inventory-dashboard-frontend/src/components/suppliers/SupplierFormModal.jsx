@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import FormInput from '../common/FormInput';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearSupplierError } from '../../features/suppliers/supplierSlice'; // Ensure correct path
 
 const SupplierFormModal = ({ isOpen, onClose, onSubmit, supplier, isEditing }) => {
+    const dispatch = useDispatch();
+    const { status, error } = useSelector((state) => state.suppliers);
+
     const [formData, setFormData] = useState({
         name: supplier?.name || '',
         contactPerson: supplier?.contactPerson || '',
@@ -12,20 +17,10 @@ const SupplierFormModal = ({ isOpen, onClose, onSubmit, supplier, isEditing }) =
     });
 
     useEffect(() => {
-        // Clear form when modal opens or supplier prop changes
         if (isOpen) {
-            setFormData({
-                name: supplier?.name || '',
-                contactPerson: supplier?.contactPerson || '',
-                email: supplier?.email || '',
-                phone: supplier?.phone || '',
-                address: supplier?.address || '',
-            });
-        } else {
-            // Reset form if modal is closed
-            setFormData({ name: '', contactPerson: '', email: '', phone: '', address: '' });
+            dispatch(clearSupplierError());
         }
-    }, [isOpen, supplier]);
+    }, [isOpen, dispatch]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

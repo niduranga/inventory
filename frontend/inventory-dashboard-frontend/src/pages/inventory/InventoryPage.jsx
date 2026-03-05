@@ -54,7 +54,6 @@ const InventoryPage = () => {
         setSearchParams({ ...searchParams, limit: limit, page: 1 });
     };
 
-    // Deduplicate categories and suppliers for filter options
     const uniqueCategories = [...new Map(productList?.map(item => [item.categoryId._id, item.categoryId])).values()];
     const uniqueSuppliers = [...new Map(productList?.map(item => [item.supplierId._id, item.supplierId])).values()];
 

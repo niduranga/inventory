@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import Modal from '../common/Modal';
 import FormInput from '../common/FormInput';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCategoryError } from '../../features/categories/categorySlice'; // Ensure correct path
 
 const CategoryFormModal = ({ isOpen, onClose, onSubmit, category, isEditing }) => {
+    const dispatch = useDispatch();
+    const { status, error } = useSelector((state) => state.categories);
+
     const [formData, setFormData] = useState({
         name: category?.name || '',
         description: category?.description || '',
     });
 
     useEffect(() => {
-        // Clear form when modal opens or when category prop changes
         if (isOpen) {
-            setFormData({
-                name: category?.name || '',
-                description: category?.description || '',
-            });
-        } else {
-            // Reset form if modal is closed
-            setFormData({ name: '', description: '' });
+            dispatch(clearCategoryError());
         }
-    }, [isOpen, category]);
+    }, [isOpen, dispatch]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

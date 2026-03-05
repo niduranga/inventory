@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../../features/categories/categorySlice';
-import { fetchProducts, fetchProductById, updateProduct, clearProductError } from '../../features/products/productSlice';
+import { useDispatch, useSelector } from 'react-react-redux';
+import { fetchProducts, updateProduct, clearProductError } from '../../features/products/productSlice';
 import Modal from '../common/Modal';
 import FormInput from '../common/FormInput';
 
 const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categories, suppliers }) => {
     const dispatch = useDispatch();
-    const { token } = useSelector((state) => state.auth);
     const { status, error } = useSelector((state) => state.products);
 
     const [formData, setFormData] = useState({
@@ -25,7 +23,6 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categ
         expirationDate: product?.expirationDate ? new Date(product.expirationDate).toISOString().split('T')[0] : '',
     });
 
-    // Effect to set form data when product prop changes or when opening for creation
     useEffect(() => {
         if (product) {
             setFormData({
@@ -43,16 +40,14 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categ
                 expirationDate: product.expirationDate ? new Date(product.expirationDate).toISOString().split('T')[0] : '',
             });
         } else {
-            // Reset form for new product
             setFormData({
                 name: '', sku: '', barcode: '', categoryId: '', supplierId: '',
                 purchasePrice: 0, sellingPrice: 0, stockQuantity: 0, minStockLevel: 0,
                 description: '', productImage: '', expirationDate: '',
             });
         }
-    }, [product]); // Dependency array includes 'product' prop
+    }, [product]);
 
-    // Clear error when modal opens or form data changes
     useEffect(() => {
         if (isOpen) {
             dispatch(clearProductError());
@@ -63,7 +58,7 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categ
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: type === 'number' ? parseFloat(value) : value, // Parse numbers correctly
+            [name]: type === 'number' ? parseFloat(value) : value,
         }));
         if (error) {
             dispatch(clearProductError());
