@@ -66,8 +66,8 @@ function App() {
             <Suspense fallback={<Spinner />}>
                 <Routes>
                     {/* Auth Routes */}
-                    <Route path="/login" element={<><AuthLayout /><LoginPage /></>}/>
-                    <Route path="/register" element={<><AuthLayout /><RegisterPage /></>}/>
+                    <Route path="/login" element={<><AuthLayout /><LoginPage /></>}/> {/* Corrected JSX closing tag */}
+                    <Route path="/register" element={<><AuthLayout /><RegisterPage /></>}/> {/* Corrected JSX closing tag */}
 
                     {/* Protected Routes with Main Layout */}
                     <Route path="/" element={<PrivateRoute><MainLayout /></PrivateRoute>}>

@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Ensure imports are correct
-import { fetchProducts, addProduct, deleteProductThunk, resetProductState, clearProductError, updateProductThunk } from '../../features/products/productSlice'; 
+import { fetchProducts, addProduct, deleteProductThunk, resetProductState, clearProductError, updateProductThunk } from '../../features/products/productSlice';
+import DataTable from '../../components/common/DataTable';
+import ProductFormModal from '../../components/products/ProductFormModal';
+import Layout from '../../layouts/MainLayout';
+import SearchFilterBar from '../../components/common/SearchFilterBar';
 import { fetchCategories } from '../../features/categories/categorySlice';
 import { fetchSuppliers } from '../../features/suppliers/supplierSlice';
 import { createAsyncThunk } from '@reduxjs/toolkit'; // Ensure this is imported

@@ -34,7 +34,8 @@ const InventoryPage = () => {
         return () => {
             dispatch(resetInventoryState());
         };
-    }, [loadInventory, dispatch, token, productList]);
+    }, [load$
+loadInventory, dispatch, token, productList]);
 
     // Clearing error on component mount
     useEffect(() => {
