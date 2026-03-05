@@ -5,8 +5,6 @@ import DataTable from '../../components/common/DataTable';
 import ProductFormModal from '../../components/products/ProductFormModal';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
-import { fetchCategories } from '../../features/categories/categorySlice';
-import { fetchSuppliers } from '../../features/suppliers/supplierSlice';
 
 const ProductsPage = () => {
     const dispatch = useDispatch();
@@ -44,7 +42,6 @@ const ProductsPage = () => {
     }, [loadProducts, dispatch, token]);
 
     useEffect(() => {
-        // Clear error on modal open/close
         if (isModalOpen) {
             dispatch(clearProductError());
         }

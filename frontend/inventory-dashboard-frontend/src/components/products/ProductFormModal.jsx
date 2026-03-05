@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProduct, updateProduct, clearProductError } from '../../features/products/productSlice';
 import { fetchCategories } from '../../features/categories/categorySlice';
-import { fetchSuppliers } from '../../features/suppliers/supplierSlice';
-import Modal from '../../components/common/Modal';
-import FormInput from '../../components/common/FormInput'; // Assuming a reusable form input component
+import { fetchProducts, fetchProductById, updateProduct, clearProductError } from '../../features/products/productSlice';
+import Modal from '../common/Modal';
+import FormInput from '../common/FormInput';
 
 const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categories, suppliers }) => {
     const dispatch = useDispatch();
@@ -23,10 +22,10 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categ
         minStockLevel: product?.minStockLevel || 0,
         description: product?.description || '',
         productImage: product?.productImage || '',
-        // Format date for input type="date"
         expirationDate: product?.expirationDate ? new Date(product.expirationDate).toISOString().split('T')[0] : '',
     });
 
+    // Effect to set form data when product prop changes or when opening for creation
     useEffect(() => {
         if (product) {
             setFormData({
@@ -51,22 +50,21 @@ const ProductFormModal = ({ isOpen, onClose, onSubmit, product, isEditing, categ
                 description: '', productImage: '', expirationDate: '',
             });
         }
-    }, [product]); // Re-run if product prop changes
+    }, [product]); // Dependency array includes 'product' prop
 
+    // Clear error when modal opens or form data changes
     useEffect(() => {
-        // Clear any previous errors when modal opens or when form data changes
         if (isOpen) {
-             dispatch(clearProductError());
+            dispatch(clearProductError());
         }
-    }, [isOpen, dispatch]); // Clear error when modal opens
+    }, [isOpen, dispatch]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: type === 'number' ? parseFloat(value) : (type === 'checkbox' ? checked : value),
+            [name]: type === 'number' ? parseFloat(value) : value, // Parse numbers correctly
         }));
-        // Clear error if user starts typing in a field after an error occurred
         if (error) {
             dispatch(clearProductError());
         }

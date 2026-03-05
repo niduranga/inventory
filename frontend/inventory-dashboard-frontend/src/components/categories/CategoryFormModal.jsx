@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Modal from '../common/Modal';
+import FormInput from '../common/FormInput';
 
 const CategoryFormModal = ({ isOpen, onClose, onSubmit, category, isEditing }) => {
     const [formData, setFormData] = useState({
         name: category?.name || '',
         description: category?.description || '',
     });
+
+    useEffect(() => {
+        // Clear form when modal opens or when category prop changes
+        if (isOpen) {
+            setFormData({
+                name: category?.name || '',
+                description: category?.description || '',
+            });
+        } else {
+            // Reset form if modal is closed
+            setFormData({ name: '', description: '' });
+        }
+    }, [isOpen, category]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

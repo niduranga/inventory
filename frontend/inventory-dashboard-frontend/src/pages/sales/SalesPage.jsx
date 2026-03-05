@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const SalesPage = () => {
     const dispatch = useDispatch();
     const { sales, status, error, pagination } = useSelector((state) => state.sales);
-    const { products: productList } = useSelector((state) => state.products);
+    const { products: productList } = useSelector((state) => state.products); 
     const { token } = useSelector((state) => state.auth);
     const userRole = useSelector((state) => state.auth.user?.role);
 
@@ -44,7 +44,6 @@ const SalesPage = () => {
     }, [loadSales, dispatch, token, productList]);
 
     useEffect(() => {
-        // Clear error on modal open/close
         if (isModalOpen) {
             dispatch(clearSaleError());
         }
