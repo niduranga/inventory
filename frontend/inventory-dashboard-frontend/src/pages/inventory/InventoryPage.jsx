@@ -9,7 +9,8 @@ import { fetchProducts } from '../../features/products/productSlice';
 
 const InventoryPage = () => { 
     const dispatch = useDispatch();
-    const { inventoryReport, status, error, pagination } = useSelector((state) => state.inventory);
+    // Ensure the state slice name is correct, assuming 'inventory'
+    const { inventoryReport, status, error } = useSelector((state) => state.inventory);
     const { products: productList } = useSelector((state) => state.products); 
     const { token } = useSelector((state) => state.auth);
     

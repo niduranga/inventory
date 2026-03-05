@@ -50,16 +50,8 @@ function App() {
         return token ? children : <Navigate to="/login" />;
     };
 
-    const RoleBasedRoute = ({ children, allowedRoles }) => {
-        const userRole = user?.role;
-        if (!token) {
-            return <Navigate to="/login" />;
-        }
-        if (!allowedRoles.includes(userRole)) {
-            return <Navigate to="/dashboard" replace />;
-        }
-        return children;
-    };
+    // Removed unused RoleBasedRoute component as per ESLint warning.
+    // If it's needed later, it can be reinstated.
 
     return (
         <Router>
