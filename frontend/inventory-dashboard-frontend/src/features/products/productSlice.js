@@ -28,13 +28,20 @@ export const updateProductThunk = createAsyncThunk(
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async ({ token, params }, { rejectWithValue }) => {
     // Replace with actual API call
     console.log('Mock API: Fetching products', params);
-    return Promise.resolve({ data: [], pagination: {} });
+    // Simulate a response structure similar to what the page expects
+    return Promise.resolve({
+        data: [
+            { _id: 'prod1', name: 'Sample Product 1', sku: 'SKU001', categoryId: { name: 'Electronics' }, supplierId: { name: 'Supplier A' }, stockQuantity: 100, minStockLevel: 10, expirationDate: '2024-12-31', sellingPrice: 199.99 },
+            { _id: 'prod2', name: 'Sample Product 2', sku: 'SKU002', categoryId: { name: 'Books' }, supplierId: { name: 'Supplier B' }, stockQuantity: 50, minStockLevel: 5, expirationDate: null, sellingPrice: 29.99 },
+        ],
+        pagination: { currentPage: 1, pageSize: 10, totalItems: 2 },
+    });
 });
 
 export const addProduct = createAsyncThunk('products/addProduct', async ({ token, productData }, { rejectWithValue }) => {
     // Replace with actual API call
     console.log('Mock API: Adding product', productData);
-    return Promise.resolve({ data: { ...productData, _id: 'new_product_id' } });
+    return Promise.resolve({ data: { ...productData, _id: 'new_product_id_' + Date.now() } });
 });
 
 export const deleteProductThunk = createAsyncThunk('products/deleteProduct', async ({ token, productId }, { rejectWithValue }) => {
@@ -88,7 +95,8 @@ const productSlice = createSlice({
     },
 });
 
-export { fetchProducts, addProduct, deleteProductThunk, updateProductThunk }; // Export thunks directly
+// Export thunks directly for easier import
+export { fetchProducts, addProduct, deleteProductThunk, updateProductThunk }; 
 export const { resetProductState, clearProductError } = productSlice.actions;
 
 export default productSlice.reducer;
