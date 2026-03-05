@@ -35,7 +35,7 @@ const UsersPage = () => {
         return () => {
             dispatch(resetUserState());
         };
-    }, [loadUsers]);
+    }, [loadUsers, dispatch]); // Added dispatch dependency
 
     useEffect(() => {
         if (isModalOpen) {
