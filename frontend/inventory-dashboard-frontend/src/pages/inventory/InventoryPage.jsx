@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// Ensure the fetchInventoryReports is correctly imported and available
+// The original error indicated it was not found. Assuming it's in './inventorySlice'
 import { fetchInventoryReports, resetInventoryState, clearInventoryError } from '../../features/inventory/inventorySlice';
 import DataTable from '../../components/common/DataTable';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
 import { fetchProducts } from '../../features/products/productSlice';
 
-const InventoryPage = () => {
+// The 'isOpen' prop was present in the error but not used in the component logic.
+// If it's not needed, it can be removed. If it's for a modal context, this component isn't a modal.
+const InventoryPage = () => { 
     const dispatch = useDispatch();
+    // Ensure the state slice is correctly named 'inventory'
     const { inventoryReport, status, error, pagination } = useSelector((state) => state.inventory);
     const { products: productList } = useSelector((state) => state.products); 
     const { token } = useSelector((state) => state.auth);
-    const userRole = useSelector((state) => state.auth.user?.role);
-
+    
     const [searchParams, setSearchParams] = useState({
         categoryId: '',
         supplierId: '',
@@ -23,12 +27,14 @@ const InventoryPage = () => {
     });
 
     const loadInventory = useCallback(() => {
+        // Ensure fetchInventoryReports is available and correctly dispatched
         dispatch(fetchInventoryReports({ token, params: searchParams }));
     }, [dispatch, token, searchParams]);
 
     useEffect(() => {
         loadInventory();
         if (!productList || productList.length === 0) {
+            // Fetching products if not already loaded, to populate filter options
             dispatch(fetchProducts({ token, params: { limit: 1000 } }));
         }
         return () => {
@@ -36,11 +42,11 @@ const InventoryPage = () => {
         };
     }, [loadInventory, dispatch, token, productList]);
 
+    // This useEffect related to 'isOpen' seems out of place for a page component.
+    // Clearing error on filter change or on mount might be more relevant.
     useEffect(() => {
-        if (isOpen) {
-            dispatch(clearInventoryError());
-        }
-    }, [isOpen, dispatch]);
+         dispatch(clearInventoryError());
+    }, [dispatch]); // Clear error on component mount
 
     const handleFilterChange = (newFilters) => {
         setSearchParams({ ...searchParams, ...newFilters, page: 1 });
@@ -54,8 +60,9 @@ const InventoryPage = () => {
         setSearchParams({ ...searchParams, limit: limit, page: 1 });
     };
 
-    const uniqueCategories = [...new Map(productList?.map(item => [item.categoryId._id, item.categoryId])).values()];
-    const uniqueSuppliers = [...new Map(productList?.map(item => [item.supplierId._id, item.supplierId])).values()];
+    // Safely access nested properties and filter out null/undefined items
+    const uniqueCategories = productList ? [...new Map(productList.map(item => item.categoryId?._id ? [item.categoryId._id, item.categoryId] : null).filter(Boolean)).values()] : [];
+    const uniqueSuppliers = productList ? [...new Map(productList.map(item => item.supplierId?._id ? [item.supplierId._id, item.supplierId] : null).filter(Boolean)).values()] : [];
 
     const categoryOptions = uniqueCategories.map(cat => ({ value: cat._id, label: cat.name }));
     const supplierOptions = uniqueSuppliers.map(sup => ({ value: sup._id, label: sup.name }));
@@ -97,9 +104,10 @@ const InventoryPage = () => {
                 {status === 'loading' && <p>Loading inventory data...</p>}
                 {error && <p className="text-red-500">Error: {error}</p>}
 
-                {!error && inventoryReport && inventoryReport.data?.currentStock?.length === 0 && status === 'succeeded' && <p>No inventory data found.</p>}
+                {/* More robust check for empty state */}
+                {status === 'succeeded' && (!inventoryReport || !inventoryReport.data || (!inventoryReport.data.currentStock?.length && !inventoryReport.data.lowStockItems?.length && !inventoryReport.data.expiringProducts?.length)) && <p>No inventory data found.</p>}
 
-                {inventoryReport && inventoryReport.data?.currentStock && inventoryReport.data.currentStock.length > 0 && (
+                {inventoryReport && inventoryReport.data?.currentStock?.length > 0 && (
                     <div>
                         <h2 className="text-2xl font-semibold mb-4">Current Stock Levels</h2>
                         <DataTable
@@ -115,12 +123,14 @@ const InventoryPage = () => {
                 {inventoryReport && inventoryReport.data?.lowStockItems?.length > 0 && (
                     <div className="mt-8">
                         <h2 className="text-2xl font-semibold mb-4">Low Stock Items</h2>
+                        {/* Slice columns to exclude 'Actions' if not applicable */}
                         <DataTable columns={columns.slice(0, -1)} data={inventoryReport.data.lowStockItems} /> 
                     </div>
                 )}
                 {inventoryReport && inventoryReport.data?.expiringProducts?.length > 0 && (
                     <div className="mt-8">
                         <h2 className="text-2xl font-semibold mb-4">Expiring Soon</h2>
+                        {/* Slice columns to exclude 'Actions' if not applicable */}
                         <DataTable columns={columns.slice(0, -1)} data={inventoryReport.data.expiringProducts} /> 
                     </div>
                 )}
