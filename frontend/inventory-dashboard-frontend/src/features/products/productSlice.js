@@ -95,8 +95,6 @@ const productSlice = createSlice({
     },
 });
 
-// Export thunks directly for easier import
-export { fetchProducts, addProduct, deleteProductThunk, updateProductThunk }; 
 export const { resetProductState, clearProductError } = productSlice.actions;
 
 export default productSlice.reducer;

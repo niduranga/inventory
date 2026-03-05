@@ -46,37 +46,41 @@ const RegisterPage = lazy(() => import('./pages/auth/RegisterPage'));
 function App() {
     const { token, user } = useSelector((state) => state.auth);
 
-    const PrivateRoute = ({ children }) => {
-        return token ? children : <Navigate to="/login" />;
+    const PrivateLayoutRoute = () => {
+        return token ? (
+            <MainLayout />
+        ) : (
+            <Navigate to="/login" replace />
+        );
     };
-
-    // Removed unused RoleBasedRoute component as per ESLint warning.
-    // If it's needed later, it can be reinstated.
 
     return (
         <Router>
             <Suspense fallback={<Spinner />}>
                 <Routes>
                     {/* Auth Routes */}
-                    <Route path="/login" element={<><AuthLayout /><LoginPage /></>}/>
-                    <Route path="/register" element={<><AuthLayout /><RegisterPage /></>}/>
+                    <Route element={<AuthLayout />}>
+                        <Route path="/login" element={<LoginPage />}/>
+                        <Route path="/register" element={<RegisterPage />}/>
+                    </Route>
 
                     {/* Protected Routes with Main Layout */}
-                    <Route path="/" element={<PrivateRoute><MainLayout /></PrivateRoute>}>
-                        <Route path="dashboard" element={<DashboardPage />} />
-                        <Route path="products" element={<ProductsPage />} />
-                        <Route path="products/:id" element={<ProductDetailsPage />} />
-                        <Route path="categories" element={<CategoriesPage />} />
-                        <Route path="suppliers" element={<SuppliersPage />} />
-                        <Route path="users" element={<UsersPage />} />
-                        <Route path="sales" element={<SalesPage />} />
-                        <Route path="sales/:id" element={<SaleDetailsPage />} />
-                        <Route path="sales/pos" element={<POSPage />} /> 
-                        <Route path="purchases" element={<PurchasesPage />} />
-                        <Route path="purchases/:id" element={<PurchaseDetailsPage />} />
-                        <Route path="inventory" element={<InventoryPage />} />
-                        <Route path="reports" element={<ReportsPage />} />
-                        <Route path="notifications" element={<NotificationsPage />} />
+                    <Route element={<PrivateLayoutRoute />}>
+                        <Route path="/dashboard" element={<DashboardPage />} />
+                        <Route path="/products" element={<ProductsPage />} />
+                        <Route path="/products/:id" element={<ProductDetailsPage />} />
+                        <Route path="/categories" element={<CategoriesPage />} />
+                        <Route path="/suppliers" element={<SuppliersPage />} />
+                        <Route path="/users" element={<UsersPage />} />
+                        <Route path="/sales" element={<SalesPage />} />
+                        <Route path="/sales/:id" element={<SaleDetailsPage />} />
+                        <Route path="/sales/pos" element={<POSPage />} /> 
+                        <Route path="/purchases" element={<PurchasesPage />} />
+                        <Route path="/purchases/:id" element={<PurchaseDetailsPage />} />
+                        <Route path="/inventory" element={<InventoryPage />} />
+                        <Route path="/reports" element={<ReportsPage />} />
+                        <Route path="/notifications" element={<NotificationsPage />} />
+                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
                         {/* Redirect to dashboard if no other route matches */}
                         <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Route>

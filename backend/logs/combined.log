@@ -1,0 +1,31 @@
+[32m{"level":"info","message":"Server running on port 5000 in development mode","timestamp":"2026-03-05 21:54:52"}[39m
+[32m{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-03-05 21:54:53"}[39m
+[32m{"level":"info","message":"Server running on port 5000 in development mode","timestamp":"2026-03-05 22:05:02"}[39m
+[32m{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-03-05 22:05:02"}[39m
+[32m{"level":"info","message":"Server running on port 5000 in development mode","timestamp":"2026-03-05 23:13:23"}[39m
+[32m{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-03-05 23:13:23"}[39m
+[32m{"level":"info","message":"GET / - Status: 200 - Duration: 8.321629ms","timestamp":"2026-03-05 23:13:56"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:14:04"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 181.440796ms","timestamp":"2026-03-05 23:14:04"}[39m
+[32m{"level":"info","message":"Server running on port 5000 in development mode","timestamp":"2026-03-05 23:16:46"}[39m
+[32m{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-03-05 23:16:46"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:17:06"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 172.276392ms","timestamp":"2026-03-05 23:17:06"}[39m
+[32m{"level":"info","message":"Server running on port 5000 in development mode","timestamp":"2026-03-05 23:18:19"}[39m
+[32m{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-03-05 23:18:20"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:18:39"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 166.198668ms","timestamp":"2026-03-05 23:18:39"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:19:00"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 156.287566ms","timestamp":"2026-03-05 23:19:00"}[39m
+[32m{"level":"info","message":"Server running on port 5000 in development mode","timestamp":"2026-03-05 23:19:53"}[39m
+[32m{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-03-05 23:19:53"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:20:12"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 166.613244ms","timestamp":"2026-03-05 23:20:12"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:20:36"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 128.606906ms","timestamp":"2026-03-05 23:20:36"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:23:21"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 138.182493ms","timestamp":"2026-03-05 23:23:21"}[39m
+[32m{"level":"info","message":"Server running on port 5000 in development mode","timestamp":"2026-03-05 23:23:40"}[39m
+[32m{"level":"info","message":"MongoDB connected successfully","timestamp":"2026-03-05 23:23:40"}[39m
+[31m{"level":"error","message":"Error during user registration: next is not a function","timestamp":"2026-03-05 23:23:55"}[39m
+[32m{"level":"info","message":"POST /api/auth/register - Status: 500 - Duration: 128.236388ms","timestamp":"2026-03-05 23:23:55"}[39m

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // Ensure imports are correct
-import { fetchInventoryReports, resetInventoryState, clearInventoryError } from '../../features/inventory/inventorySlice';
+import { fetchStockHistory, resetInventoryState, clearInventoryError } from '../../features/inventory/inventorySlice';
 import DataTable from '../../components/common/DataTable';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
@@ -24,7 +24,7 @@ const InventoryPage = () => {
     });
 
     const loadInventory = useCallback(() => {
-        dispatch(fetchInventoryReports({ token, params: searchParams }));
+        dispatch(fetchStockHistory({ token, params: searchParams }));
     }, [dispatch, token, searchParams]);
 
     useEffect(() => {
