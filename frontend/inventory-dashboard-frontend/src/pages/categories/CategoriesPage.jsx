@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// Ensure imports are correct
 import { fetchCategories, addCategory, updateCategoryThunk, deleteCategoryThunk, resetCategoryState, clearCategoryError } from '../../features/categories/categorySlice';
 import DataTable from '../../components/common/DataTable';
 import CategoryFormModal from '../../components/categories/CategoryFormModal';
@@ -31,13 +32,13 @@ const CategoriesPage = () => {
         return () => {
             dispatch(resetCategoryState());
         };
-    }, [loadCategories]);
+    }, [loadCategories, dispatch]); // Added dispatch dependency
 
     useEffect(() => {
         if (isModalOpen) {
             dispatch(clearCategoryError());
         }
-    }, [isModalOpen, dispatch]);
+    }, [isModalOpen, dispatch]); // Added dispatch dependency
 
     const handleOpenModal = (category = null) => {
         if (!canCreateEditDelete && category === null) return;

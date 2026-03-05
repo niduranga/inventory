@@ -1,6 +1,6 @@
 import React from 'react';
-import Sidebar from './Sidebar'; // Sidebar is likely in the same directory as MainLayout
-import Header from './Header';   // Header is likely in the same directory as MainLayout
+import Sidebar from './Sidebar'; // Assuming Sidebar is in the same directory
+import Header from './Header';   // Assuming Header is in the same directory
 
 const MainLayout = ({ children }) => {
     return (

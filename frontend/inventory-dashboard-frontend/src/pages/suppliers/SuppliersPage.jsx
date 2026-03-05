@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// Corrected imports
 import { fetchSuppliers, addSupplier, updateSupplierThunk, deleteSupplierThunk, resetSupplierState, clearSupplierError } from '../../features/suppliers/supplierSlice';
 import DataTable from '../../components/common/DataTable';
 import SupplierFormModal from '../../components/suppliers/SupplierFormModal';
@@ -37,7 +38,7 @@ const SuppliersPage = () => {
         if (isModalOpen) {
             dispatch(clearSupplierError());
         }
-    }, [isModalOpen, dispatch]);
+    }, [isModalOpen, dispatch]); // Added dispatch dependency
 
     const handleOpenModal = (supplier = null) => {
         if (!canCreateEditDelete && supplier === null) return;

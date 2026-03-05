@@ -1,9 +1,9 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import MainLayout from './layouts/MainLayout'; // Assuming MainLayout is in src/layouts/MainLayout.jsx
-import AuthLayout from './layouts/AuthLayout'; // Assuming AuthLayout is in src/layouts/AuthLayout.jsx
-import Spinner from './components/common/Spinner'; // Assuming Spinner is in src/components/common/Spinner.jsx
+import MainLayout from './layouts/MainLayout';
+import AuthLayout from './layouts/AuthLayout';
+import Spinner from './components/common/Spinner';
 
 // Lazy load pages
 const DashboardPage = lazy(() => import('./pages/dashboard/DashboardPage'));
@@ -24,7 +24,7 @@ const UsersPage = lazy(() => import('./pages/users/UsersPage'));
 // Sales Routes
 const SalesPage = lazy(() => import('./pages/sales/SalesPage'));
 const SaleDetailsPage = lazy(() => import('./pages/sales/SalesDetailsPage'));
-const POSPage = lazy(() => import('./pages/sales/POSPage')); // For new sale creation
+const POSPage = lazy(() => import('./pages/sales/POSPage'));
 
 // Purchase Routes
 const PurchasesPage = lazy(() => import('./pages/purchases/PurchasesPage'));
@@ -50,15 +50,12 @@ function App() {
         return token ? children : <Navigate to="/login" />;
     };
 
-    // Role-based access control (RBAC) component remains the same.
-    // It checks user role and redirects if unauthorized.
     const RoleBasedRoute = ({ children, allowedRoles }) => {
         const userRole = user?.role;
         if (!token) {
             return <Navigate to="/login" />;
         }
         if (!allowedRoles.includes(userRole)) {
-            // Redirect to dashboard or a 403 page if not allowed
             return <Navigate to="/dashboard" replace />;
         }
         return children;
@@ -69,8 +66,8 @@ function App() {
             <Suspense fallback={<Spinner />}>
                 <Routes>
                     {/* Auth Routes */}
-                    <Route path="/login" element={<><AuthLayout /><LoginPage /></Route>}
-                    <Route path="/register" element={<><AuthLayout /><RegisterPage /></Route>}
+                    <Route path="/login" element={<><AuthLayout /><LoginPage /></>}/>
+                    <Route path="/register" element={<><AuthLayout /><RegisterPage /></>}/>
 
                     {/* Protected Routes with Main Layout */}
                     <Route path="/" element={<PrivateRoute><MainLayout /></PrivateRoute>}>

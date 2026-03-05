@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// Ensure imports are correct
 import { fetchUsers, inviteUserThunk, updateUserThunk, deleteUserThunk, resetUserState, clearUserError } from '../../features/users/userSlice';
 import DataTable from '../../components/common/DataTable';
 import UserFormModal from '../../components/users/UserFormModal';
 import Layout from '../../layouts/MainLayout';
 import SearchFilterBar from '../../components/common/SearchFilterBar';
-import { useNavigate } from 'react-router-dom';
 
 const UsersPage = () => {
     const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const UsersPage = () => {
         if (isModalOpen) {
             dispatch(clearUserError());
         }
-    }, [isModalOpen, dispatch]);
+    }, [isModalOpen, dispatch]); // Added dispatch dependency
 
     const handleOpenModal = (user = null) => {
         if (!canInviteUpdateDelete && user === null) return;

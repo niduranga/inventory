@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// Ensure imports are correct
 import { fetchSales, createSaleThunk, updateSaleThunk, cancelSaleThunk, resetSaleState, clearSaleError } from '../../features/sales/saleSlice';
 import DataTable from '../../components/common/DataTable';
 import Layout from '../../layouts/MainLayout';
@@ -47,7 +48,7 @@ const SalesPage = () => {
         if (isModalOpen) {
             dispatch(clearSaleError());
         }
-    }, [isModalOpen, dispatch]);
+    }, [isModalOpen, dispatch]); // Added dispatch dependency
 
     const handleOpenModal = (sale = null) => {
         if (!sale) return;

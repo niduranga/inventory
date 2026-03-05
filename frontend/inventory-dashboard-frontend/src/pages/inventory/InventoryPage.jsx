@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// Correcting the import path for fetchInventoryReports
+// Ensure imports are correct
 import { fetchInventoryReports, resetInventoryState, clearInventoryError } from '../../features/inventory/inventorySlice';
 import DataTable from '../../components/common/DataTable';
 import Layout from '../../layouts/MainLayout';
@@ -9,7 +9,6 @@ import { fetchProducts } from '../../features/products/productSlice';
 
 const InventoryPage = () => { 
     const dispatch = useDispatch();
-    // Ensure the state slice is correctly named 'inventory'
     const { inventoryReport, status, error, pagination } = useSelector((state) => state.inventory);
     const { products: productList } = useSelector((state) => state.products); 
     const { token } = useSelector((state) => state.auth);
@@ -24,14 +23,12 @@ const InventoryPage = () => {
     });
 
     const loadInventory = useCallback(() => {
-        // Ensure fetchInventoryReports is available and correctly dispatched
         dispatch(fetchInventoryReports({ token, params: searchParams }));
     }, [dispatch, token, searchParams]);
 
     useEffect(() => {
         loadInventory();
         if (!productList || productList.length === 0) {
-            // Fetching products if not already loaded, to populate filter options
             dispatch(fetchProducts({ token, params: { limit: 1000 } }));
         }
         return () => {
@@ -39,10 +36,10 @@ const InventoryPage = () => {
         };
     }, [loadInventory, dispatch, token, productList]);
 
-    // Clearing error on component mount or when filters change is more appropriate than relying on an 'isOpen' prop here.
+    // Clearing error on component mount
     useEffect(() => {
          dispatch(clearInventoryError());
-    }, [dispatch]); // Clear error on component mount
+    }, [dispatch]);
 
     const handleFilterChange = (newFilters) => {
         setSearchParams({ ...searchParams, ...newFilters, page: 1 });
@@ -56,7 +53,6 @@ const InventoryPage = () => {
         setSearchParams({ ...searchParams, limit: limit, page: 1 });
     };
 
-    // Safely access nested properties and filter out null/undefined items
     const uniqueCategories = productList ? [...new Map(productList.map(item => item.categoryId?._id ? [item.categoryId._id, item.categoryId] : null).filter(Boolean)).values()] : [];
     const uniqueSuppliers = productList ? [...new Map(productList.map(item => item.supplierId?._id ? [item.supplierId._id, item.supplierId] : null).filter(Boolean)).values()] : [];
 
@@ -100,7 +96,6 @@ const InventoryPage = () => {
                 {status === 'loading' && <p>Loading inventory data...</p>}
                 {error && <p className="text-red-500">Error: {error}</p>}
 
-                {/* More robust check for empty state */}
                 {status === 'succeeded' && (!inventoryReport || !inventoryReport.data || (!inventoryReport.data.currentStock?.length && !inventoryReport.data.lowStockItems?.length && !inventoryReport.data.expiringProducts?.length)) && <p>No inventory data found.</p>}
 
                 {inventoryReport && inventoryReport.data?.currentStock?.length > 0 && (
@@ -119,14 +114,12 @@ const InventoryPage = () => {
                 {inventoryReport && inventoryReport.data?.lowStockItems?.length > 0 && (
                     <div className="mt-8">
                         <h2 className="text-2xl font-semibold mb-4">Low Stock Items</h2>
-                        {/* Slice columns to exclude 'Actions' if not applicable */}
                         <DataTable columns={columns.slice(0, -1)} data={inventoryReport.data.lowStockItems} /> 
                     </div>
                 )}
                 {inventoryReport && inventoryReport.data?.expiringProducts?.length > 0 && (
                     <div className="mt-8">
                         <h2 className="text-2xl font-semibold mb-4">Expiring Soon</h2>
-                        {/* Slice columns to exclude 'Actions' if not applicable */}
                         <DataTable columns={columns.slice(0, -1)} data={inventoryReport.data.expiringProducts} /> 
                     </div>
                 )}

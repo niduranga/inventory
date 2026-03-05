@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, resetProductState, clearProductError } from '../../features/products/productSlice';
+// Ensure imports are correct
+import { fetchProducts, addProduct, deleteProductThunk, resetProductState, clearProductError } from '../../features/products/productSlice';
 import DataTable from '../../components/common/DataTable';
 import ProductFormModal from '../../components/products/ProductFormModal';
 import Layout from '../../layouts/MainLayout';
@@ -41,13 +42,13 @@ const ProductsPage = () => {
         return () => {
             dispatch(resetProductState());
         };
-    }, [loadProducts, dispatch, token]);
+    }, [loadProducts, dispatch, token]); // Added dispatch dependency
 
     useEffect(() => {
         if (isModalOpen) {
             dispatch(clearProductError());
         }
-    }, [isModalOpen, dispatch]);
+    }, [isModalOpen, dispatch]); // Added dispatch dependency
 
     const handleOpenModal = (product = null) => {
         if (!canCreateEditDelete && product === null) return;
@@ -64,8 +65,10 @@ const ProductsPage = () => {
         if (!canCreateEditDelete) return;
         let resultAction;
         if (currentProduct) {
-            resultAction = await dispatch(updateProduct({ token, productId: currentProduct._id, productData }));
+            // Use the correctly named thunk
+            resultAction = await dispatch(updateProductThunk({ token, productId: currentProduct._id, productData }));
         } else {
+            // Assuming addProduct is correctly defined in productSlice
             resultAction = await dispatch(addProduct({ token, productData }));
         }
 
