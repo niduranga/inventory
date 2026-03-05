@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: image-utility-app-server
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    repo: https://github.com/niduranga/image-utility-app.git
+    branch: main
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        sync: false # Render assigns a port automatically
